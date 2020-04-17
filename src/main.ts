@@ -5,14 +5,15 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
-  const options = new DocumentBuilder().setTitle('Swagger API')
+  const options = new DocumentBuilder()
+    .setTitle('Swagger API')
     .setDescription('Product Api built with NextJS')
     .setVersion('0.1')
     .build();
 
-    const document = SwaggerModule.createDocument(app, options);
-    SwaggerModule.setup('/', app, document);
+  const document = SwaggerModule.createDocument(app, options);
+  SwaggerModule.setup('/', app, document);
 
-  await app.listen( process.env.port || 4000);
+  await app.listen(process.env.port || 4000);
 }
 bootstrap();
