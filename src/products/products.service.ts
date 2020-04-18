@@ -50,6 +50,16 @@ export class ProductsService {
     if (price < 0) return price;
     return (this.products[index] = updatedProduct);
   }
+  deleteProduct(id) {
+    //can use underscore for the product here as its the index that matters when deleting.
+    const [_, index] = this.findProduct(id);
+
+    this.products.splice(index, 1);
+    // or you could do this below: -
+    // adding the index on the end [1] will specifically target the index.
+    // const index = this.findProduct(id)[1];
+
+  }
 
   // using this to reduce duplication
   private findProduct(id: string): [Product, number] {
@@ -62,4 +72,5 @@ export class ProductsService {
     }
     return [product, productIndex];
   }
+  
 }

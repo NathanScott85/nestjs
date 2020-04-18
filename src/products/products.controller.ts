@@ -1,4 +1,4 @@
-import { Controller, Post, Body, Get, Param, Patch } from '@nestjs/common';
+import { Controller, Post, Body, Get, Param, Patch, Delete } from '@nestjs/common';
 import { ProductsService } from './products.service';
 
 // using the @Controller() decorator is what will define this as a controller.
@@ -52,6 +52,12 @@ export class ProductsController {
   ) {
     const { title, description, price } = body;
     this.productsService.updateSingleProduct(id, title, description, price);
+    return null;
+  }
+
+  @Delete(':id')
+  removeProduct(@Param('id') id: string){
+    this.productsService.deleteProduct(id);
     return null;
   }
 }
