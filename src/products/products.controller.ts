@@ -1,5 +1,6 @@
-import { Controller, Post, Body } from '@nestjs/common';
+import { Controller, Post, Body, Get } from '@nestjs/common';
 import { ProductsService } from './products.service';
+
 
 // using the @Controller() decorator is what will define this as a controller.
 // adding the products string to the @Controller allows the api to kick in on requests  at /products
@@ -9,22 +10,23 @@ export class ProductsController {
   constructor(private productsService: ProductsService) {}
 
   @Post()
-  async addProduct(
+   addProduct(
     @Body()
     body: {
-      id?: string;
+      id: string;
       title: string;
       description: string;
       price: number;
     },
-  ): Promise<Object> {
-    const { title, description, price, id } = body;
-    await this.productsService.insertProduct(id, title, description, price);
-    return {
-      id: id,
-      title: title,
-      description: description,
-      price: price,
-    };
+  ): Object {
+    const { title, description, price} = body;
+    const id = this.productsService.insertProduct(title, description, price);
+
+    return { id, title, description, price };
+  }
+
+  @Get()
+  getAllProducts() {
+    return this.productsService.getProducts();
   }
 }
