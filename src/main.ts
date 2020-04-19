@@ -10,7 +10,7 @@ async function bootstrap() {
     .setDescription('Product Api built with NextJS')
     .setVersion('0.1')
     .build();
-
+   //can add .addApiKey() to later allow the generation of an API key later.
   const document = SwaggerModule.createDocument(app, options);
   SwaggerModule.setup('/', app, document);
 
