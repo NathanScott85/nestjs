@@ -40,6 +40,7 @@ Nest is an MIT-licensed open source project. It can grow thanks to the sponsors 
 
 ## Stay in touch
 
+NestJs Authors: -
 - Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
 - Website - [https://nestjs.com](https://nestjs.com/)
 - Twitter - [@nestframework](https://twitter.com/nestframework)
@@ -51,12 +52,20 @@ Nest is an MIT-licensed open source project. It can grow thanks to the sponsors 
 ### Project Learning Goals
 
 -- Learning NestJS fundamentals
---
 -- SwaggerUI
 -- NoSQL Database, MongoDB.
+-- Connect to MongoDB atlas.
+-- Learn SwaggerUI @Decorators
+-- Implement Users with NestJS
+-- Update users to MongoDB.
 
 -- Expand further on the above.
+### Packages to Look into.
 
-### Porject Extra's
+-- Json Web Token
+-- UUID API KEY 
+-- DOTENV
+
+### Project Extra's
 
 -- Testing

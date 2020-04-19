@@ -1,23 +1,15 @@
-import { ApiProperty } from "@nestjs/swagger";
-import { IProduct }from './interface';
+import * as mongoose from 'mongoose';
 
-export class Product {
-    @ApiProperty({ description: 'The id assigned to the Product', type: String })
-    public id: string;
-
-    @ApiProperty({ description: 'The id assigned to the Product', type: String, required: true })
-    public title: string;
-
-    @ApiProperty({ description: 'The id assigned to the Product', type: String, required: true })
-    public description: string;
-
-    @ApiProperty({ description: 'The Price assigned to the Product', type: String, required: true })
-    public price: number;
-
-  constructor({id, title, description, price}: IProduct) {
-    this.id = id;
-    this.title = title;
-    this.description = description;
-    this.price = price;
-  }
+export const  ProductSchema = new mongoose.Schema({
+  title:  { type: String, required: true },
+  description: { type: String, required: true },
+  price:  { type: String, required: true }
+});
+// using the extends keyword to let typescript know that we are using @types/mongoose.
+// without it we get errors  when using .save() which is a mongoose feature.
+export interface Product extends mongoose.Document{
+     id: string;
+     title: string;
+     description: string;
+     price: number;
 }
