@@ -1,4 +1,4 @@
-import { Controller, Post, Body, Get, Param, Patch, Delete } from '@nestjs/common';
+import { Controller, Post, Body, Get, Param, Patch, Delete, HttpCode } from '@nestjs/common';
 import { ProductsService } from './products.service';
 import { ApiTags, ApiResponse, ApiCreatedResponse } from '@nestjs/swagger';
 
@@ -13,7 +13,7 @@ export class ProductsController {
 
   @Post()
   @ApiCreatedResponse({ status: 201, description: 'This sends a POST request to the above products end point and will modify the given data.'})
-  addProduct(
+   addProduct(
     @Body()
     body: {
       id: string;
@@ -21,7 +21,7 @@ export class ProductsController {
       description: string;
       price: number;
     },
-  ): Record<string, any> {
+  ) {
     const { title, description, price } = body;
     const id = this.productsService.insertProduct(title, description, price);
 
