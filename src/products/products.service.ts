@@ -1,14 +1,15 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { Product } from './product.model';
 import { v4 as uuid } from 'uuid';
+import { IProduct } from './interface';
 
 @Injectable()
 export class ProductsService {
   private products: Product[] = [];
 
-  insertProduct(title: string, description: string, price: number): Record<string, any> {
+  insertProduct({title, description, price}: IProduct) {
     const id = uuid();
-    const newProduct = new Product(id, title, description, price);
+    const newProduct = new Product({id, title, description, price});
     this.products.push(newProduct);
 
     return id;
