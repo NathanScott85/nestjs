@@ -1,77 +1,66 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { Product } from './product.model';
-import { v4 as uuid } from 'uuid';
 import { IProduct } from './interface';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
+// import { v4 as uuid } from 'uuid';
 
 @Injectable()
 export class ProductsService {
-  private products: Product[] = [];
+  constructor(@InjectModel('Product') private readonly productModel: Model<IProduct>) { }
 
-  insertProduct({title, description, price}: IProduct) {
-    const id = uuid();
-    const newProduct = new Product({id, title, description, price});
-    this.products.push(newProduct);
-
-    return id;
+  async insertProduct(id: string, title: string, description: string, price: number) {
+    const newProduct = new this.productModel({ id, title, description, price });
+    const result = await newProduct.save();
+    return result.id;
   }
 
-  getProducts() {
-    return [...this.products];
+  async getProducts() {
+    const products = await this.productModel.find().exec();
+    return products.map((product: IProduct) => ({ id: product.id, title: product.title, description: product.description, price: product.price }));
   }
 
-  getSingleProduct(id: string) {
-    const product = this.findProduct(id)[0];
-    return { ...product };
+  async getSingleProduct(id: string) {
+    const product = await this.findProduct(id);
+    return { id: product.id, title: product.title, description: product.description, price: product.price };
   }
 
-  getSingleProductByName(productName: string) {
-    const productIndex = this.products.findIndex(
-      product => product.title.toLowerCase() === productName.toLowerCase(),
-    );
-    const product = this.products[productIndex];
-    if (!product) {
-      throw new NotFoundException('I think you are lost!');
-    }
-    return product;
-  }
-
-  updateSingleProduct(
+  async updateSingleProduct(
     id: string,
     title: string,
     description: string,
     price: number,
   ) {
-    const [product, index] = this.findProduct(id);
 
-    const updatedProduct = { ...product };
-
+    const updatedProduct = await this.findProduct(id);
     if (title) updatedProduct.title = title;
     if (description) updatedProduct.description = description;
     if (price) updatedProduct.price = price;
     if (price < 0) return price;
-    return (this.products[index] = updatedProduct);
+    if(!updatedProduct) throw new NotFoundException(
+      'The Item you are looking for could not be found',
+    );
+    updatedProduct.save();
   }
-  deleteProduct(id) {
-    //can use underscore for the product here as its the index that matters when deleting.
-    const [_, index] = this.findProduct(id);
-
-    this.products.splice(index, 1);
-    // or you could do this below: -
-    // adding the index on the end [1] will specifically target the index.
-    // const index = this.findProduct(id)[1];
-
+  async deleteProduct(id: string) {
+    const result = await this.productModel.deleteOne({ _id: id }).exec();
+    if (result.n === 0) throw new NotFoundException('No Product Deleted');
   }
 
-  // using this to reduce duplication
-  private findProduct(id: string): [Product, number] {
-    const productIndex = this.products.findIndex(product => product.id === id);
-    const product = this.products[productIndex];
+  private async findProduct(id: string): Promise<IProduct> {
+    let product;
+    try {
+      product = await this.productModel.findById(id).exec()
+    } catch (error) {
+      throw new NotFoundException(
+        'The Item you are looking for could not be found',
+      );
+    }
+
     if (!product) {
       throw new NotFoundException(
         'The Item you are looking for could not be found',
       );
     }
-    return [product, productIndex];
+    return product;
   }
-  
 }
