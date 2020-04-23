@@ -14,7 +14,6 @@ export class UsersService {
         return id;
     }
     getUsers(){
-        console.log(...this.users)
         return [...this.users]
     }
 }
