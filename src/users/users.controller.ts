@@ -1,4 +1,4 @@
-import { Post, Body, Controller } from "@nestjs/common";
+import { Post, Body, Controller, Get } from "@nestjs/common";
 import { UsersService } from "./users.service";
 import { ApiTags } from "@nestjs/swagger";
 
@@ -19,5 +19,9 @@ export class UsersController {
         const userId = this.userService.insertUser({ id, username, password, email });
 
         return { userId, username, password, email }
+    }
+    @Get()
+    getAllUsers(){
+        return this.userService.getUsers()
     }
 }

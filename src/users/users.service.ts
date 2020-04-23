@@ -13,4 +13,7 @@ export class UsersService {
         this.users.push(newUser);
         return id;
     }
+    getUsers(){
+        return [...this.users]
+    }
 }
